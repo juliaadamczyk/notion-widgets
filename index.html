@@ -11,12 +11,25 @@
             background-color: #fddbb9; /* light orange background */
             font-family: Arial, sans-serif; /* default font */
         }
-        #heading {
+        #headingContainer {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        #heading {
             font-size: 3em;
+        }
+        #headingInput {
+            display: none;
+            border: none;
+            background: none;
+            font-size: 3em;
+            text-align: center;
+            width: auto;
+            color: inherit; /* Inherit color from parent */
+            font-family: inherit; /* Inherit font family from parent */
         }
         #settingsBtn {
             position: fixed;
@@ -43,7 +56,10 @@
     </style>
 </head>
 <body>
-    <h1 id="heading">Adjustable Website</h1>
+    <div id="headingContainer">
+        <h1 id="heading">Adjustable Website</h1>
+        <input type="text" id="headingInput" value="Adjustable Website">
+    </div>
 
     <div id="settingsBtn">&#9881;</div>
 
@@ -80,6 +96,26 @@
             document.getElementById("heading").style.fontFamily = fontFamily;
         }
 
+        function toggleEdit() {
+            var heading = document.getElementById("heading");
+            var headingInput = document.getElementById("headingInput");
+            if (heading.style.display === "none") {
+                heading.style.display = "block";
+                headingInput.style.display = "none";
+                heading.textContent = headingInput.value;
+            } else {
+                heading.style.display = "none";
+                headingInput.style.display = "block";
+                headingInput.value = heading.textContent;
+                headingInput.focus();
+            }
+            // Update font style of input to match header
+            var computedStyle = window.getComputedStyle(heading);
+            headingInput.style.fontSize = computedStyle.fontSize;
+            headingInput.style.fontFamily = computedStyle.fontFamily;
+            headingInput.style.color = computedStyle.color;
+        }
+
         function hideSettings() {
             document.getElementById("settingsPanel").style.display = "none";
         }
@@ -89,27 +125,43 @@
         // Update website on input changes
         document.getElementById("bgColor").addEventListener("input", updateWebsite);
         document.getElementById("fontColor").addEventListener("input", updateWebsite);
-        document.getElementById("fontSize").addEventListener("input", function() {
-            updateWebsite();
-            document.getElementById("fontSizeValue").textContent = this.value;
-        });
+        document.getElementById("fontSize").addEventListener("input", updateWebsite);
         document.getElementById("fontFamily").addEventListener("change", updateWebsite);
 
         // Close settings panel when clicking anywhere else on the website
         document.body.addEventListener("click", function(event) {
-            if (event.target.id !== "settingsPanel" && event.target.id !== "settingsBtn") {
+            if (!event.target.closest("#settingsPanel") && event.target.id !== "settingsBtn") {
                 hideSettings();
             }
         });
 
-        // Prevent settings panel from closing when clicking on the color picker
+        // Prevent settings panel from closing when interacting with the color pickers or dropdowns
         document.getElementById("bgColor").addEventListener("click", function(event) {
             event.stopPropagation();
         });
 
-        // Prevent settings panel from closing when interacting with the font size slider
-        document.getElementById("fontSize").addEventListener("click", function(event) {
+        document.getElementById("fontColor").addEventListener("click", function(event) {
             event.stopPropagation();
+        });
+
+        document.getElementById("fontFamily").addEventListener("click", function(event) {
+            event.stopPropagation();
+        });
+
+        // Toggle between editable header and normal header when clicking on the heading
+        document.getElementById("headingContainer").addEventListener("click", toggleEdit);
+        document.getElementById("headingInput").addEventListener("blur", toggleEdit);
+        document.getElementById("headingInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                toggleEdit();
+            }
+        });
+        
+        // Close settings panel when clicking on the background
+        document.body.addEventListener("click", function(event) {
+            if (event.target.id !== "settingsPanel" && event.target.id !== "settingsBtn" && event.target.id !== "headingContainer" && event.target.id !== "heading" && event.target.id !== "headingInput") {
+                hideSettings();
+            }
         });
     </script>
 </body>
