@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adjustable Website</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fddbb9; /* light orange background */
+            font-family: Arial, sans-serif; /* default font */
+        }
+        #heading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3em;
+        }
+        #settingsBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: block; /* Change display to block */
+            cursor: pointer;
+            z-index: 9999; /* Ensure it's on top */
+        }
+        #settingsPanel {
+            position: absolute;
+            bottom: 70px; /* Adjusted position */
+            right: 30px; /* Adjusted position */
+            padding: 20px;
+            background-color: white;
+            border: 2px solid #333;
+            display: none;
+            z-index: 9998; /* Ensure it's below settingsBtn */
+        }
+        #fontSizeLabel {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="heading">Adjustable Website</h1>
+
+    <div id="settingsBtn">&#9881;</div>
+
+    <div id="settingsPanel">
+        <label for="bgColor">Background Color:</label>
+        <input type="color" id="bgColor" value="#ffffff"><br><br>
+        <label for="fontColor">Font Color:</label>
+        <input type="color" id="fontColor" value="#000000"><br><br>
+        <label id="fontSizeLabel" for="fontSize">Font Size: <span id="fontSizeValue">12</span>px</label>
+        <input type="range" id="fontSize" min="12" max="48" step="1" value="12"><br><br>
+        <label for="fontFamily">Font Family:</label>
+        <select id="fontFamily">
+            <option value="Arial, sans-serif">Arial</option>
+            <option value="Times New Roman, serif">Times New Roman</option>
+            <option value="Verdana, sans-serif">Verdana</option>
+        </select><br><br>
+    </div>
+
+    <script>
+        function showSettings(event) {
+            event.stopPropagation();
+            document.getElementById("settingsPanel").style.display = "block";
+        }
+
+        function updateWebsite() {
+            var bgColor = document.getElementById("bgColor").value;
+            var fontColor = document.getElementById("fontColor").value;
+            var fontSize = document.getElementById("fontSize").value + "px";
+            var fontFamily = document.getElementById("fontFamily").value;
+
+            document.body.style.backgroundColor = bgColor;
+            document.body.style.color = fontColor;
+            document.getElementById("heading").style.fontSize = fontSize;
+            document.getElementById("heading").style.fontFamily = fontFamily;
+        }
+
+        function hideSettings() {
+            document.getElementById("settingsPanel").style.display = "none";
+        }
+
+        document.getElementById("settingsBtn").addEventListener("click", showSettings);
+
+        // Update website on input changes
+        document.getElementById("bgColor").addEventListener("input", updateWebsite);
+        document.getElementById("fontColor").addEventListener("input", updateWebsite);
+        document.getElementById("fontSize").addEventListener("input", function() {
+            updateWebsite();
+            document.getElementById("fontSizeValue").textContent = this.value;
+        });
+        document.getElementById("fontFamily").addEventListener("change", updateWebsite);
+
+        // Close settings panel when clicking anywhere else on the website
+        document.body.addEventListener("click", function(event) {
+            if (event.target.id !== "settingsPanel" && event.target.id !== "settingsBtn") {
+                hideSettings();
+            }
+        });
+
+        // Prevent settings panel from closing when clicking on the color picker
+        document.getElementById("bgColor").addEventListener("click", function(event) {
+            event.stopPropagation();
+        });
+
+        // Prevent settings panel from closing when interacting with the font size slider
+        document.getElementById("fontSize").addEventListener("click", function(event) {
+            event.stopPropagation();
+        });
+    </script>
+</body>
+</html>
