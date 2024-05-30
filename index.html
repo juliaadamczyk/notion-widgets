@@ -32,7 +32,11 @@
             border: none;
             background: none;
             font-size: 2em; /* Match default size */
-            text-align: center;
+            text-align: center; /* Center text inside the input */
+            width: calc(100% - 20px); /* Ensure the input width matches the container */
+            position: absolute; /* Absolute positioning */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Adjust for centering */
             width: auto;
             color: inherit; /* Inherit color from parent */
             font-family: inherit; /* Inherit font family from parent */
@@ -63,11 +67,8 @@
             border: 2px solid #333;
             display: none;
             z-index: 9998; /* Ensure it's below settingsBtn */
-            width: calc(100% - 20px); /* Make settings panel wider */
+            width: auto; /* Make settings panel fit content */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: grid; /* Use grid for layout */
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive columns */
-            gap: 10px; /* Space between items */
         }
         #settingsPanel label {
             display: block;
@@ -75,11 +76,26 @@
         }
         #settingsPanel input,
         #settingsPanel select {
-            width: 100%;
+            width: auto;
         }
         #settingsPanel * {
             color: black;
             font-family: Arial, sans-serif;
+        }
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .settings-row label,
+        .settings-row input,
+        .settings-row select {
+            margin-right: 10px;
+            flex-grow: 1;
+        }
+        .settings-row label {
+            flex-grow: 0;
+            margin-right: 5px;
         }
     </style>
 </head>
@@ -92,25 +108,14 @@
     <div id="settingsBtn">&#9881;</div>
 
     <div id="settingsPanel">
-        <div>
+        <div class="settings-row">
             <label for="bgColor">Background Color:</label>
             <input type="color" id="bgColor" value="#ffffff">
-        </div>
-        <div>
             <label for="fontColor">Font Color:</label>
             <input type="color" id="fontColor" value="#000000">
         </div>
-        <div>
-            <label for="fontSize">Font Size:</label>
-            <select id="fontSize">
-                <option value="1em">Small</option>
-                <option value="2em">Medium</option>
-                <option value="3em">Large</option>
-                <option value="4em">Very Large</option>
-            </select>
-        </div>
-        <div>
-            <label for="fontFamily">Font Family:</label>
+        <div class="settings-row">
+            <label for="fontFamily">Font:</label>
             <select id="fontFamily">
                 <option value="Arial, sans-serif">Arial</option>
                 <option value="Times New Roman, serif">Times New Roman</option>
@@ -118,13 +123,18 @@
                 <option value="Baskerville, serif">Baskerville</option>
                 <option value="Big Caslon, serif">Big Caslon</option>
             </select>
-        </div>
-        <div>
             <label for="fontStyle">Style:</label>
             <select id="fontStyle">
                 <option value="normal">Normal</option>
                 <option value="italic">Italic</option>
                 <option value="bold">Bold</option>
+            </select>
+            <label for="fontSize">Size:</label>
+            <select id="fontSize">
+                <option value="1em">Small</option>
+                <option value="2em">Medium</option>
+                <option value="3em">Large</option>
+                <option value="4em">Very Large</option>
             </select>
         </div>
     </div>
@@ -177,12 +187,13 @@
                 headingInput.style.display = "block";
                 headingInput.value = heading.textContent;
                 headingInput.focus();
+
+                // Update font style of input to match header
+                var computedStyle = window.getComputedStyle(heading);
+                headingInput.style.fontSize = computedStyle.fontSize;
+                headingInput.style.fontFamily = computedStyle.fontFamily;
+                headingInput.style.color = computedStyle.color;
             }
-            // Update font style of input to match header
-            var computedStyle = window.getComputedStyle(heading);
-            headingInput.style.fontSize = computedStyle.fontSize;
-            headingInput.style.fontFamily = computedStyle.fontFamily;
-            headingInput.style.color = computedStyle.color;
         }
 
         function hideSettings(event) {
@@ -226,12 +237,12 @@
         document.getElementById("fontFamily").addEventListener("change", updateWebsite);
         document.getElementById("fontStyle").addEventListener("change", updateWebsite);
 
-        // Close settings panel on click outside
-        document.addEventListener("click", hideSettings);
-
         // Toggle header edit on click
         document.getElementById("heading").addEventListener("click", toggleEdit);
         document.getElementById("headingInput").addEventListener("blur", toggleEdit);
+
+        // Close settings panel on click outside
+        document.addEventListener("click", hideSettings);
 
         // Load settings on page load
         window.onload = loadSettings;
