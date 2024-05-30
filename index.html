@@ -20,11 +20,12 @@
             text-align: center;
             margin: 0;
             padding: 0;
-            width: 100%;
+            width: calc(100% - 20px); /* Less margin */
         }
         #heading {
-            font-size: 2em; /* Default size is smaller */
+            font-size: 2em; /* Default size */
             margin: 0;
+            padding: 5px 0; /* Less padding */
         }
         #headingInput {
             display: none;
@@ -47,6 +48,11 @@
             padding: 10px; /* Increase clickable area */
             background: rgba(255, 255, 255, 0.5); /* Light background for better visibility */
             border-radius: 50%; /* Make it circular */
+            opacity: 0.5; /* Lower opacity */
+        }
+        #settingsBtn:hover,
+        #settingsPanel {
+            opacity: 1; /* Full opacity on hover or settings open */
         }
         #settingsPanel {
             position: fixed; /* Use fixed positioning */
@@ -57,22 +63,19 @@
             border: 2px solid #333;
             display: none;
             z-index: 9998; /* Ensure it's below settingsBtn */
-            width: 80%; /* Make settings panel wider */
+            width: calc(100% - 20px); /* Make settings panel wider */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        #settingsPanel .row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
+            display: grid; /* Use grid for layout */
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive columns */
+            gap: 10px; /* Space between items */
         }
         #settingsPanel label {
-            flex: 1;
-            text-align: right;
-            margin-right: 10px;
+            display: block;
+            margin-bottom: 5px;
         }
         #settingsPanel input,
         #settingsPanel select {
-            flex: 2;
+            width: 100%;
         }
         #settingsPanel * {
             color: black;
@@ -89,15 +92,15 @@
     <div id="settingsBtn">&#9881;</div>
 
     <div id="settingsPanel">
-        <div class="row">
+        <div>
             <label for="bgColor">Background Color:</label>
             <input type="color" id="bgColor" value="#ffffff">
         </div>
-        <div class="row">
+        <div>
             <label for="fontColor">Font Color:</label>
             <input type="color" id="fontColor" value="#000000">
         </div>
-        <div class="row">
+        <div>
             <label for="fontSize">Font Size:</label>
             <select id="fontSize">
                 <option value="1em">Small</option>
@@ -106,7 +109,7 @@
                 <option value="4em">Very Large</option>
             </select>
         </div>
-        <div class="row">
+        <div>
             <label for="fontFamily">Font Family:</label>
             <select id="fontFamily">
                 <option value="Arial, sans-serif">Arial</option>
@@ -116,7 +119,7 @@
                 <option value="Big Caslon, serif">Big Caslon</option>
             </select>
         </div>
-        <div class="row">
+        <div>
             <label for="fontStyle">Style:</label>
             <select id="fontStyle">
                 <option value="normal">Normal</option>
@@ -184,7 +187,8 @@
 
         function hideSettings(event) {
             var settingsPanel = document.getElementById("settingsPanel");
-            if (!event.target.closest("#settingsPanel") && event.target.id !== "settingsBtn") {
+            var settingsBtn = document.getElementById("settingsBtn");
+            if (!settingsPanel.contains(event.target) && !settingsBtn.contains(event.target)) {
                 settingsPanel.style.display = "none";
             }
         }
