@@ -17,6 +17,8 @@
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
+            margin: 0;
+            padding: 0;
         }
         #heading {
             font-size: 3em;
@@ -33,25 +35,26 @@
         }
         #settingsBtn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: block; /* Change display to block */
+            bottom: 10px;
+            right: 10px;
+            display: block;
             cursor: pointer;
             z-index: 9999; /* Ensure it's on top */
+            font-size: 2em; /* Increase size of the settings icon */
         }
         #settingsPanel {
             position: absolute;
-            bottom: 70px; /* Adjusted position */
-            right: 30px; /* Adjusted position */
+            bottom: 70px;
+            right: 10px;
             padding: 20px;
             background-color: white;
             border: 2px solid #333;
             display: none;
             z-index: 9998; /* Ensure it's below settingsBtn */
         }
-        #fontSizeLabel {
-            display: block;
-            margin-bottom: 10px;
+        #settingsPanel * {
+            color: black;
+            font-family: Arial, sans-serif;
         }
     </style>
 </head>
@@ -68,16 +71,27 @@
         <input type="color" id="bgColor" value="#ffffff"><br><br>
         <label for="fontColor">Font Color:</label>
         <input type="color" id="fontColor" value="#000000"><br><br>
-        <label id="fontSizeLabel" for="fontSize">Font Size: <span id="fontSizeValue">12</span>px</label>
-        <input type="range" id="fontSize" min="12" max="48" step="1" value="12"><br><br>
+        <label for="fontSize">Font Size:</label>
+        <select id="fontSize">
+            <option value="1em">Small</option>
+            <option value="2em">Medium</option>
+            <option value="3em">Large</option>
+            <option value="4em">Very Large</option>
+        </select><br><br>
         <label for="fontFamily">Font Family:</label>
         <select id="fontFamily">
             <option value="Arial, sans-serif">Arial</option>
             <option value="Times New Roman, serif">Times New Roman</option>
             <option value="Verdana, sans-serif">Verdana</option>
-            <option value="Baskerville, sans-serif">Baskerville</option>
-            <option value="Big Caslon, sans-serif">Big Caslon</option>
+            <option value="Baskerville, serif">Baskerville</option>
+            <option value="Big Caslon, serif">Big Caslon</option>
         </select><br><br>
+        <label for="fontStyle">Style:</label>
+        <select id="fontStyle">
+            <option value="normal">Normal</option>
+            <option value="italic">Italic</option>
+            <option value="bold">Bold</option>
+        </select>
     </div>
 
     <script>
@@ -89,13 +103,23 @@
         function updateWebsite() {
             var bgColor = document.getElementById("bgColor").value;
             var fontColor = document.getElementById("fontColor").value;
-            var fontSize = document.getElementById("fontSize").value + "px";
+            var fontSize = document.getElementById("fontSize").value;
             var fontFamily = document.getElementById("fontFamily").value;
+            var fontStyle = document.getElementById("fontStyle").value;
 
             document.body.style.backgroundColor = bgColor;
-            document.body.style.color = fontColor;
+            document.getElementById("heading").style.color = fontColor;
             document.getElementById("heading").style.fontSize = fontSize;
             document.getElementById("heading").style.fontFamily = fontFamily;
+            document.getElementById("heading").style.fontStyle = fontStyle;
+            document.getElementById("heading").style.fontWeight = fontStyle === "bold" ? "bold" : "normal";
+
+            // Save settings to local storage
+            localStorage.setItem("bgColor", bgColor);
+            localStorage.setItem("fontColor", fontColor);
+            localStorage.setItem("fontSize", fontSize);
+            localStorage.setItem("fontFamily", fontFamily);
+            localStorage.setItem("fontStyle", fontStyle);
         }
 
         function toggleEdit() {
@@ -105,6 +129,9 @@
                 heading.style.display = "block";
                 headingInput.style.display = "none";
                 heading.textContent = headingInput.value;
+
+                // Save heading text to local storage
+                localStorage.setItem("headingText", heading.textContent);
             } else {
                 heading.style.display = "none";
                 headingInput.style.display = "block";
@@ -118,8 +145,34 @@
             headingInput.style.color = computedStyle.color;
         }
 
-        function hideSettings() {
-            document.getElementById("settingsPanel").style.display = "none";
+        function hideSettings(event) {
+            if (!event.target.closest("#settingsPanel") && event.target.id !== "settingsBtn") {
+                document.getElementById("settingsPanel").style.display = "none";
+            }
+        }
+
+        // Load settings from local storage
+        function loadSettings() {
+            if (localStorage.getItem("bgColor")) {
+                document.getElementById("bgColor").value = localStorage.getItem("bgColor");
+            }
+            if (localStorage.getItem("fontColor")) {
+                document.getElementById("fontColor").value = localStorage.getItem("fontColor");
+            }
+            if (localStorage.getItem("fontSize")) {
+                document.getElementById("fontSize").value = localStorage.getItem("fontSize");
+            }
+            if (localStorage.getItem("fontFamily")) {
+                document.getElementById("fontFamily").value = localStorage.getItem("fontFamily");
+            }
+            if (localStorage.getItem("fontStyle")) {
+                document.getElementById("fontStyle").value = localStorage.getItem("fontStyle");
+            }
+            if (localStorage.getItem("headingText")) {
+                document.getElementById("heading").textContent = localStorage.getItem("headingText");
+            }
+
+            updateWebsite();
         }
 
         document.getElementById("settingsBtn").addEventListener("click", showSettings);
@@ -127,26 +180,15 @@
         // Update website on input changes
         document.getElementById("bgColor").addEventListener("input", updateWebsite);
         document.getElementById("fontColor").addEventListener("input", updateWebsite);
-        document.getElementById("fontSize").addEventListener("input", updateWebsite);
+        document.getElementById("fontSize").addEventListener("change", updateWebsite);
         document.getElementById("fontFamily").addEventListener("change", updateWebsite);
+        document.getElementById("fontStyle").addEventListener("change", updateWebsite);
 
         // Close settings panel when clicking anywhere else on the website
-        document.body.addEventListener("click", function(event) {
-            if (!event.target.closest("#settingsPanel") && event.target.id !== "settingsBtn") {
-                hideSettings();
-            }
-        });
+        document.body.addEventListener("click", hideSettings);
 
-        // Prevent settings panel from closing when interacting with the color pickers or dropdowns
-        document.getElementById("bgColor").addEventListener("click", function(event) {
-            event.stopPropagation();
-        });
-
-        document.getElementById("fontColor").addEventListener("click", function(event) {
-            event.stopPropagation();
-        });
-
-        document.getElementById("fontFamily").addEventListener("click", function(event) {
+        // Prevent settings panel from closing when interacting with the settings elements
+        document.getElementById("settingsPanel").addEventListener("click", function(event) {
             event.stopPropagation();
         });
 
@@ -158,13 +200,9 @@
                 toggleEdit();
             }
         });
-        
-        // Close settings panel when clicking on the background
-        document.body.addEventListener("click", function(event) {
-            if (event.target.id !== "settingsPanel" && event.target.id !== "settingsBtn" && event.target.id !== "headingContainer" && event.target.id !== "heading" && event.target.id !== "headingInput") {
-                hideSettings();
-            }
-        });
+
+        // Load settings on page load
+        window.addEventListener("load", loadSettings);
     </script>
 </body>
 </html>
