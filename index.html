@@ -10,6 +10,7 @@
             padding: 0;
             background-color: #fddbb9; /* light orange background */
             font-family: Arial, sans-serif; /* default font */
+            overflow: hidden; /* Hide scrollbars */
         }
         #headingContainer {
             position: absolute;
@@ -19,15 +20,17 @@
             text-align: center;
             margin: 0;
             padding: 0;
+            width: 100%;
         }
         #heading {
-            font-size: 3em;
+            font-size: 2em; /* Default size is smaller */
+            margin: 0;
         }
         #headingInput {
             display: none;
             border: none;
             background: none;
-            font-size: 3em;
+            font-size: 2em; /* Match default size */
             text-align: center;
             width: auto;
             color: inherit; /* Inherit color from parent */
@@ -41,16 +44,35 @@
             cursor: pointer;
             z-index: 9999; /* Ensure it's on top */
             font-size: 2em; /* Increase size of the settings icon */
+            padding: 10px; /* Increase clickable area */
+            background: rgba(255, 255, 255, 0.5); /* Light background for better visibility */
+            border-radius: 50%; /* Make it circular */
         }
         #settingsPanel {
-            position: absolute;
-            bottom: 70px;
+            position: fixed; /* Use fixed positioning */
+            bottom: 50px;
             right: 10px;
-            padding: 20px;
+            padding: 10px;
             background-color: white;
             border: 2px solid #333;
             display: none;
             z-index: 9998; /* Ensure it's below settingsBtn */
+            width: 80%; /* Make settings panel wider */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #settingsPanel .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        #settingsPanel label {
+            flex: 1;
+            text-align: right;
+            margin-right: 10px;
+        }
+        #settingsPanel input,
+        #settingsPanel select {
+            flex: 2;
         }
         #settingsPanel * {
             color: black;
@@ -67,37 +89,52 @@
     <div id="settingsBtn">&#9881;</div>
 
     <div id="settingsPanel">
-        <label for="bgColor">Background Color:</label>
-        <input type="color" id="bgColor" value="#ffffff"><br><br>
-        <label for="fontColor">Font Color:</label>
-        <input type="color" id="fontColor" value="#000000"><br><br>
-        <label for="fontSize">Font Size:</label>
-        <select id="fontSize">
-            <option value="1em">Small</option>
-            <option value="2em">Medium</option>
-            <option value="3em">Large</option>
-            <option value="4em">Very Large</option>
-        </select><br><br>
-        <label for="fontFamily">Font Family:</label>
-        <select id="fontFamily">
-            <option value="Arial, sans-serif">Arial</option>
-            <option value="Times New Roman, serif">Times New Roman</option>
-            <option value="Verdana, sans-serif">Verdana</option>
-            <option value="Baskerville, serif">Baskerville</option>
-            <option value="Big Caslon, serif">Big Caslon</option>
-        </select><br><br>
-        <label for="fontStyle">Style:</label>
-        <select id="fontStyle">
-            <option value="normal">Normal</option>
-            <option value="italic">Italic</option>
-            <option value="bold">Bold</option>
-        </select>
+        <div class="row">
+            <label for="bgColor">Background Color:</label>
+            <input type="color" id="bgColor" value="#ffffff">
+        </div>
+        <div class="row">
+            <label for="fontColor">Font Color:</label>
+            <input type="color" id="fontColor" value="#000000">
+        </div>
+        <div class="row">
+            <label for="fontSize">Font Size:</label>
+            <select id="fontSize">
+                <option value="1em">Small</option>
+                <option value="2em">Medium</option>
+                <option value="3em">Large</option>
+                <option value="4em">Very Large</option>
+            </select>
+        </div>
+        <div class="row">
+            <label for="fontFamily">Font Family:</label>
+            <select id="fontFamily">
+                <option value="Arial, sans-serif">Arial</option>
+                <option value="Times New Roman, serif">Times New Roman</option>
+                <option value="Verdana, sans-serif">Verdana</option>
+                <option value="Baskerville, serif">Baskerville</option>
+                <option value="Big Caslon, serif">Big Caslon</option>
+            </select>
+        </div>
+        <div class="row">
+            <label for="fontStyle">Style:</label>
+            <select id="fontStyle">
+                <option value="normal">Normal</option>
+                <option value="italic">Italic</option>
+                <option value="bold">Bold</option>
+            </select>
+        </div>
     </div>
 
     <script>
         function showSettings(event) {
             event.stopPropagation();
-            document.getElementById("settingsPanel").style.display = "block";
+            var settingsPanel = document.getElementById("settingsPanel");
+            if (settingsPanel.style.display === "block") {
+                settingsPanel.style.display = "none";
+            } else {
+                settingsPanel.style.display = "block";
+            }
         }
 
         function updateWebsite() {
@@ -146,8 +183,9 @@
         }
 
         function hideSettings(event) {
+            var settingsPanel = document.getElementById("settingsPanel");
             if (!event.target.closest("#settingsPanel") && event.target.id !== "settingsBtn") {
-                document.getElementById("settingsPanel").style.display = "none";
+                settingsPanel.style.display = "none";
             }
         }
 
@@ -184,25 +222,15 @@
         document.getElementById("fontFamily").addEventListener("change", updateWebsite);
         document.getElementById("fontStyle").addEventListener("change", updateWebsite);
 
-        // Close settings panel when clicking anywhere else on the website
-        document.body.addEventListener("click", hideSettings);
+        // Close settings panel on click outside
+        document.addEventListener("click", hideSettings);
 
-        // Prevent settings panel from closing when interacting with the settings elements
-        document.getElementById("settingsPanel").addEventListener("click", function(event) {
-            event.stopPropagation();
-        });
-
-        // Toggle between editable header and normal header when clicking on the heading
-        document.getElementById("headingContainer").addEventListener("click", toggleEdit);
+        // Toggle header edit on click
+        document.getElementById("heading").addEventListener("click", toggleEdit);
         document.getElementById("headingInput").addEventListener("blur", toggleEdit);
-        document.getElementById("headingInput").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                toggleEdit();
-            }
-        });
 
         // Load settings on page load
-        window.addEventListener("load", loadSettings);
+        window.onload = loadSettings;
     </script>
 </body>
 </html>
