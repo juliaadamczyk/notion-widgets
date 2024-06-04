@@ -6,193 +6,293 @@
     <title>Adjustable Website</title>
     <style>
         body {
+            background-color: white;
             margin: 0;
             padding: 0;
-            background-color: #fddbb9; /* light orange background */
-            font-family: Arial, sans-serif; /* default font */
-            overflow: hidden; /* Hide scrollbars */
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
         }
-        #headingContainer {
+
+        #heading {
+            font-size: 24px;
+            text-align: center;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            text-align: center;
             margin: 0;
-            padding: 0;
-            width: calc(100% - 20px); /* Less margin */
         }
-        #heading {
-            font-size: 2em; /* Default size */
-            margin: 0;
-            padding: 5px 0; /* Less padding */
-        }
+
         #headingInput {
-            display: none;
-            border: none;
-            background: none;
-            font-size: 2em; /* Match default size */
-            text-align: center; /* Center text inside the input */
-            width: calc(100% - 20px); /* Ensure the input width matches the container */
-            position: absolute; /* Absolute positioning */
-            left: 50%; /* Center horizontally */
-            transform: translateX(-50%); /* Adjust for centering */
+            text-align: center;
             width: auto;
-            color: inherit; /* Inherit color from parent */
-            font-family: inherit; /* Inherit font family from parent */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: none;
+            outline: none;
+            background: none;
+            display: none;
+            margin: 0;
         }
+
+        #settingsPanel {
+            position: fixed;
+            bottom: 15px;
+            right: 40px;  /* Adjust the value to move it closer to the right */
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #333;
+            display: none;
+            z-index: 9998;
+            width: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            opacity: 1;
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .settings-row label {
+            margin-right: 10px;
+        }
+
         #settingsBtn {
             position: fixed;
             bottom: 10px;
             right: 10px;
-            display: block;
             cursor: pointer;
-            z-index: 9999; /* Ensure it's on top */
-            font-size: 2em; /* Increase size of the settings icon */
-            padding: 10px; /* Increase clickable area */
-            background: rgba(255, 255, 255, 0.5); /* Light background for better visibility */
-            border-radius: 50%; /* Make it circular */
-            opacity: 0.5; /* Lower opacity */
+            z-index: 9999;
+            font-size: 1.2em;
+            padding: 5px;
+            border-radius: 50%;
+            opacity: 0.5;
+            background: none;
         }
-        #settingsBtn:hover,
-        #settingsPanel {
-            opacity: 1; /* Full opacity on hover or settings open */
+
+        #settingsBtn:hover {
+            opacity: 1;
         }
-        #settingsPanel {
-            position: fixed; /* Use fixed positioning */
-            bottom: 50px;
-            right: 10px;
-            padding: 10px;
-            background-color: white;
-            border: 2px solid #333;
-            display: none;
-            z-index: 9998; /* Ensure it's below settingsBtn */
-            width: auto; /* Make settings panel fit content */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        #settingsPanel label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        #settingsPanel input,
-        #settingsPanel select {
-            width: auto;
-        }
-        #settingsPanel * {
-            color: black;
-            font-family: Arial, sans-serif;
-        }
-        .settings-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        .settings-row label,
-        .settings-row input,
-        .settings-row select {
+
+        #settingsPanel select,
+        #settingsPanel input[type="color"] {
             margin-right: 10px;
-            flex-grow: 1;
         }
-        .settings-row label {
-            flex-grow: 0;
-            margin-right: 5px;
+
+        #settingsPanel input[type="color"] {
+            padding: 0;
+            border: none;
+        }
+
+        #settingsPanel select {
+            padding: 5px;
+            border: 1px solid #333;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <div id="headingContainer">
-        <h1 id="heading">Adjustable Website</h1>
-        <input type="text" id="headingInput" value="Adjustable Website">
-    </div>
-
-    <div id="settingsBtn">&#9881;</div>
+    <h1 id="heading">Adjustable Website</h1>
+    <input type="text" id="headingInput">
 
     <div id="settingsPanel">
         <div class="settings-row">
-            <label for="bgColor">Background Color:</label>
+            <label for="bgColor">Background color:</label>
             <input type="color" id="bgColor" value="#ffffff">
-            <label for="fontColor">Font Color:</label>
+            <label for="fontColor">Font color:</label>
             <input type="color" id="fontColor" value="#000000">
-        </div>
-        <div class="settings-row">
             <label for="fontFamily">Font:</label>
             <select id="fontFamily">
-                <option value="Arial, sans-serif">Arial</option>
-                <option value="Times New Roman, serif">Times New Roman</option>
-                <option value="Verdana, sans-serif">Verdana</option>
-                <option value="Baskerville, serif">Baskerville</option>
-                <option value="Big Caslon, serif">Big Caslon</option>
+                <option value="Arial">Arial</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Helvetica">Helvetica</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Baskerville">Baskerville</option>
+                <option value="Big Caslon">Big Caslon</option>
             </select>
+        </div>
+        <div class="settings-row">
             <label for="fontStyle">Style:</label>
             <select id="fontStyle">
                 <option value="normal">Normal</option>
-                <option value="italic">Italic</option>
                 <option value="bold">Bold</option>
+                <option value="italic">Italic</option>
+                <option value="bold italic">Bold Italic</option>
             </select>
             <label for="fontSize">Size:</label>
             <select id="fontSize">
-                <option value="1em">Small</option>
-                <option value="2em">Medium</option>
-                <option value="3em">Large</option>
-                <option value="4em">Very Large</option>
+                <option value="small">Small</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+                <option value="very large">Very Large</option>
+            </select>
+            <label for="textAlign">Align:</label>
+            <select id="textAlign">
+                <option value="left">Left</option>
+                <option value="center">Center</option>
+                <option value="right">Right</option>
             </select>
         </div>
     </div>
 
-    <script>
-        function showSettings(event) {
-            event.stopPropagation();
-            var settingsPanel = document.getElementById("settingsPanel");
-            if (settingsPanel.style.display === "block") {
-                settingsPanel.style.display = "none";
-            } else {
-                settingsPanel.style.display = "block";
-            }
-        }
+    <div id="settingsBtn">⚙️</div>
 
+    <script>
         function updateWebsite() {
             var bgColor = document.getElementById("bgColor").value;
             var fontColor = document.getElementById("fontColor").value;
             var fontSize = document.getElementById("fontSize").value;
             var fontFamily = document.getElementById("fontFamily").value;
             var fontStyle = document.getElementById("fontStyle").value;
+            var textAlign = document.getElementById("textAlign").value;
 
             document.body.style.backgroundColor = bgColor;
-            document.getElementById("heading").style.color = fontColor;
-            document.getElementById("heading").style.fontSize = fontSize;
-            document.getElementById("heading").style.fontFamily = fontFamily;
-            document.getElementById("heading").style.fontStyle = fontStyle;
-            document.getElementById("heading").style.fontWeight = fontStyle === "bold" ? "bold" : "normal";
+            heading.style.color = fontColor;
+            heading.style.fontFamily = fontFamily;
+            heading.style.textAlign = textAlign;
+            headingInput.style.textAlign = textAlign;
 
-            // Save settings to local storage
-            localStorage.setItem("bgColor", bgColor);
-            localStorage.setItem("fontColor", fontColor);
-            localStorage.setItem("fontSize", fontSize);
-            localStorage.setItem("fontFamily", fontFamily);
-            localStorage.setItem("fontStyle", fontStyle);
+            switch (fontSize) {
+                case "small":
+                    heading.style.fontSize = "16px";
+                    headingInput.style.fontSize = "16px";
+                    break;
+                case "medium":
+                    heading.style.fontSize = "24px";
+                    headingInput.style.fontSize = "24px";
+                    break;
+                case "large":
+                    heading.style.fontSize = "32px";
+                    headingInput.style.fontSize = "32px";
+                            break;
+                case "very large":
+                    heading.style.fontSize = "48px";
+                    headingInput.style.fontSize = "48px";
+                    break;
+            }
+
+            switch (textAlign) {
+                case "left":
+                    heading.style.textAlign = "left";
+                    headingInput.style.textAlign = "left";
+                    break;
+                case "center":
+                    heading.style.textAlign = "center";
+                    headingInput.style.textAlign = "center";
+                    break;
+                case "right":
+                    heading.style.textAlign = "right";
+                    headingInput.style.textAlign = "right";
+                    break;
+            }
+
+            switch (fontStyle) {
+                case "normal":
+                    heading.style.fontWeight = "normal";
+                    heading.style.fontStyle = "normal";
+                    headingInput.style.fontWeight = "normal";
+                    headingInput.style.fontStyle = "normal";
+                    break;
+                case "bold":
+                    heading.style.fontWeight = "bold";
+                    heading.style.fontStyle = "normal";
+                    headingInput.style.fontWeight = "bold";
+                    headingInput.style.fontStyle = "normal";
+                    break;
+                case "italic":
+                    heading.style.fontWeight = "normal";
+                    heading.style.fontStyle = "italic";
+                    headingInput.style.fontWeight = "normal";
+                    headingInput.style.fontStyle = "italic";
+                    break;
+                case "bold italic":
+                    heading.style.fontWeight = "bold";
+                    heading.style.fontStyle = "italic";
+                    headingInput.style.fontWeight = "bold";
+                    headingInput.style.fontStyle = "italic";
+                    break;
+            }
+
+            // Save settings to session storage for this window
+            sessionStorage.setItem("bgColor", bgColor);
+            sessionStorage.setItem("fontColor", fontColor);
+            sessionStorage.setItem("fontSize", fontSize);
+            sessionStorage.setItem("fontFamily", fontFamily);
+            sessionStorage.setItem("fontStyle", fontStyle);
+            sessionStorage.setItem("textAlign", textAlign);
+            sessionStorage.setItem("headingText", heading.textContent);
         }
 
-        function toggleEdit() {
+        function loadSettings() {
+            if (sessionStorage.getItem("bgColor")) {
+                document.getElementById("bgColor").value = sessionStorage.getItem("bgColor");
+            }
+            if (sessionStorage.getItem("fontColor")) {
+                document.getElementById("fontColor").value = sessionStorage.getItem("fontColor");
+            }
+            if (sessionStorage.getItem("fontSize")) {
+                document.getElementById("fontSize").value = sessionStorage.getItem("fontSize");
+            }
+            if (sessionStorage.getItem("fontFamily")) {
+                document.getElementById("fontFamily").value = sessionStorage.getItem("fontFamily");
+            }
+            if (sessionStorage.getItem("fontStyle")) {
+                document.getElementById("fontStyle").value = sessionStorage.getItem("fontStyle");
+            }
+            if (sessionStorage.getItem("textAlign")) {
+                document.getElementById("textAlign").value = sessionStorage.getItem("textAlign");
+            }
+            if (sessionStorage.getItem("headingText")) {
+                document.getElementById("heading").textContent = sessionStorage.getItem("headingText");
+            }
+
+            updateWebsite();
+        }
+
+        function toggleEdit(event) {
             var heading = document.getElementById("heading");
             var headingInput = document.getElementById("headingInput");
+
             if (heading.style.display === "none") {
+                heading.textContent = headingInput.value;
                 heading.style.display = "block";
                 headingInput.style.display = "none";
-                heading.textContent = headingInput.value;
 
-                // Save heading text to local storage
-                localStorage.setItem("headingText", heading.textContent);
+                // Save heading text to session storage
+                sessionStorage.setItem("headingText", heading.textContent);
             } else {
+                headingInput.style.color = heading.style.color;
+                headingInput.style.fontFamily = heading.style.fontFamily;
+                headingInput.style.fontSize = heading.style.fontSize;
+                headingInput.style.fontWeight = heading.style.fontWeight;
+                headingInput.style.fontStyle = heading.style.fontStyle;
+                headingInput.style.textAlign = heading.style.textAlign; 
+
                 heading.style.display = "none";
                 headingInput.style.display = "block";
                 headingInput.value = heading.textContent;
                 headingInput.focus();
+            }
+        }
 
-                // Update font style of input to match header
-                var computedStyle = window.getComputedStyle(heading);
-                headingInput.style.fontSize = computedStyle.fontSize;
-                headingInput.style.fontFamily = computedStyle.fontFamily;
-                headingInput.style.color = computedStyle.color;
+
+        function toggleSettings(event) {
+            event.stopPropagation();
+            var settingsPanel = document.getElementById("settingsPanel");
+            if (settingsPanel.style.display === "block") {
+                settingsPanel.style.display = "none";
+            } else {
+                settingsPanel.style.display = "block";
             }
         }
 
@@ -204,47 +304,17 @@
             }
         }
 
-        // Load settings from local storage
-        function loadSettings() {
-            if (localStorage.getItem("bgColor")) {
-                document.getElementById("bgColor").value = localStorage.getItem("bgColor");
-            }
-            if (localStorage.getItem("fontColor")) {
-                document.getElementById("fontColor").value = localStorage.getItem("fontColor");
-            }
-            if (localStorage.getItem("fontSize")) {
-                document.getElementById("fontSize").value = localStorage.getItem("fontSize");
-            }
-            if (localStorage.getItem("fontFamily")) {
-                document.getElementById("fontFamily").value = localStorage.getItem("fontFamily");
-            }
-            if (localStorage.getItem("fontStyle")) {
-                document.getElementById("fontStyle").value = localStorage.getItem("fontStyle");
-            }
-            if (localStorage.getItem("headingText")) {
-                document.getElementById("heading").textContent = localStorage.getItem("headingText");
-            }
-
-            updateWebsite();
-        }
-
-        document.getElementById("settingsBtn").addEventListener("click", showSettings);
-
-        // Update website on input changes
-        document.getElementById("bgColor").addEventListener("input", updateWebsite);
-        document.getElementById("fontColor").addEventListener("input", updateWebsite);
-        document.getElementById("fontSize").addEventListener("change", updateWebsite);
+        document.getElementById("settingsBtn").addEventListener("click", toggleSettings);
+        document.addEventListener("click", hideSettings);
+        document.getElementById("bgColor").addEventListener("change", updateWebsite);
+        document.getElementById("fontColor").addEventListener("change", updateWebsite);
         document.getElementById("fontFamily").addEventListener("change", updateWebsite);
         document.getElementById("fontStyle").addEventListener("change", updateWebsite);
-
-        // Toggle header edit on click
+        document.getElementById("fontSize").addEventListener("change", updateWebsite);
+        document.getElementById("textAlign").addEventListener("change", updateWebsite);
         document.getElementById("heading").addEventListener("click", toggleEdit);
         document.getElementById("headingInput").addEventListener("blur", toggleEdit);
 
-        // Close settings panel on click outside
-        document.addEventListener("click", hideSettings);
-
-        // Load settings on page load
         window.onload = loadSettings;
     </script>
 </body>
