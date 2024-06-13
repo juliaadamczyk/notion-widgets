@@ -18,12 +18,11 @@
             display: grid;
             grid-template-columns: repeat(3, 150px);
             grid-template-rows: repeat(5, 150px);
-            gap: 10px;
+            gap: 4px;
         }
         .upload-box {
             width: 150px;
             height: 150px;
-            border: 2px dashed #ccc;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -42,7 +41,6 @@
         .upload-box img {
             max-width: 100%;
             max-height: 100%;
-            display: none;
         }
     </style>
 </head>
@@ -50,69 +48,73 @@
     <div class="container">
         <!-- Repeat the upload-box div 15 times -->
         <div class="upload-box">
-            <input type="file" accept="image/*" onchange="previewImage(event)">
+            <input type="file" accept="image/*" onchange="previewImage(event, 0)">
             <img src="#" alt="Image Preview">
         </div>
         <div class="upload-box">
-            <input type="file" accept="image/*" onchange="previewImage(event)">
+            <input type="file" accept="image/*" onchange="previewImage(event, 1)">
             <img src="#" alt="Image Preview">
         </div>
         <div class="upload-box">
-            <input type="file" accept="image/*" onchange="previewImage(event)">
+            <input type="file" accept="image/*" onchange="previewImage(event, 2)">
             <img src="#" alt="Image Preview">
         </div>
         <div class="upload-box">
-            <input type="file" accept="image/*" onchange="previewImage(event)">
+            <input type="file" accept="image/*" onchange="previewImage(event, 3)">
             <img src="#" alt="Image Preview">
         </div>
         <div class="upload-box">
-            <input type="file" accept="image/*" onchange="previewImage(event)">
+            <input type="file" accept="image/*" onchange="previewImage(event, 4)">
             <img src="#" alt="Image Preview">
         </div>
         <div class="upload-box">
-            <input type="file" accept="image/*" onchange="previewImage(event)">
+            <input type="file" accept="image/*" onchange="previewImage(event, 5)">
             <img src="#" alt="Image Preview">
         </div>
         <div class="upload-box">
-            <input type="file" accept="image/*" onchange="previewImage(event)">
+            <input type="file" accept="image/*" onchange="previewImage(event, 6)">
             <img src="#" alt="Image Preview">
         </div>
         <div class="upload-box">
-            <input type="file" accept="image/*" onchange="previewImage(event)">
+            <input type="file" accept="image/*" onchange="previewImage(event, 7)">
             <img src="#" alt="Image Preview">
         </div>
         <div class="upload-box">
-            <input type="file" accept="image/*" onchange="previewImage(event)">
+            <input type="file" accept="image/*" onchange="previewImage(event, 8)">
             <img src="#" alt="Image Preview">
         </div>
         <div class="upload-box">
-            <input type="file" accept="image/*" onchange="previewImage(event)">
+            <input type="file" accept="image/*" onchange="previewImage(event, 9)">
             <img src="#" alt="Image Preview">
         </div>
         <div class="upload-box">
-            <input type="file" accept="image/*" onchange="previewImage(event)">
+            <input type="file" accept="image/*" onchange="previewImage(event, 10)">
             <img src="#" alt="Image Preview">
         </div>
         <div class="upload-box">
-            <input type="file" accept="image/*" onchange="previewImage(event)">
+            <input type="file" accept="image/*" onchange="previewImage(event, 11)">
             <img src="#" alt="Image Preview">
         </div>
         <div class="upload-box">
-            <input type="file" accept="image/*" onchange="previewImage(event)">
+            <input type="file" accept="image/*" onchange="previewImage(event, 12)">
             <img src="#" alt="Image Preview">
         </div>
         <div class="upload-box">
-            <input type="file" accept="image/*" onchange="previewImage(event)">
+            <input type="file" accept="image/*" onchange="previewImage(event, 13)">
             <img src="#" alt="Image Preview">
         </div>
         <div class="upload-box">
-            <input type="file" accept="image/*" onchange="previewImage(event)">
+            <input type="file" accept="image/*" onchange="previewImage(event, 14)">
             <img src="#" alt="Image Preview">
         </div>
     </div>
 
     <script>
-        function previewImage(event) {
+        document.addEventListener('DOMContentLoaded', (event) => {
+            loadImages();
+        });
+
+        function previewImage(event, index) {
             const input = event.target;
             const file = input.files[0];
             const reader = new FileReader();
@@ -121,9 +123,27 @@
                 const imgElement = input.nextElementSibling;
                 imgElement.src = e.target.result;
                 imgElement.style.display = 'block';
+                saveImage(index, e.target.result);
             }
 
             reader.readAsDataURL(file);
+        }
+
+        function saveImage(index, dataUrl) {
+            localStorage.setItem(`image${index}`, dataUrl);
+        }
+
+        function loadImages() {
+            const uploadBoxes = document.querySelectorAll('.upload-box');
+
+            uploadBoxes.forEach((box, index) => {
+                const savedImage = localStorage.getItem(`image${index}`);
+                if (savedImage) {
+                    const imgElement = box.querySelector('img');
+                    imgElement.src = savedImage;
+                    imgElement.style.display = 'block';
+                }
+            });
         }
     </script>
 </body>
