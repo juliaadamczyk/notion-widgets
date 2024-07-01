@@ -7,12 +7,27 @@
     <style>
         body {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            background-color: #f0f0f0;
+            background-color: #fff;
             margin: 0;
             font-family: Arial, sans-serif;
+        }
+        .icons {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 600px;
+            margin: 20px 0;
+        }
+        .icons div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
         }
         .container {
             display: grid;
@@ -29,7 +44,7 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            background-color: #fff;
+            background-color: #ddd;
         }
         .upload-box input[type="file"] {
             position: absolute;
@@ -42,70 +57,94 @@
             max-width: 100%;
             max-height: 100%;
         }
+        .upload-icon {
+            font-size: 48px;
+            color: #aaa;
+        }
     </style>
 </head>
 <body>
+    <div class="icons">
+        <div id="grid-icon">🔲</div>
+        <div id="reels-icon">🎥</div>
+        <div id="tags-icon">🏷️</div>
+    </div>
     <div class="container">
         <!-- Repeat the upload-box div 15 times -->
         <div class="upload-box">
             <input type="file" accept="image/*" onchange="previewImage(event, 0)">
-            <img src="#" alt="Image Preview">
+            <span class="upload-icon">⬆️</span>
+            <img src="#" alt="Image Preview" style="display:none;">
         </div>
         <div class="upload-box">
             <input type="file" accept="image/*" onchange="previewImage(event, 1)">
-            <img src="#" alt="Image Preview">
+            <span class="upload-icon">⬆️</span>
+            <img src="#" alt="Image Preview" style="display:none;">
         </div>
         <div class="upload-box">
             <input type="file" accept="image/*" onchange="previewImage(event, 2)">
-            <img src="#" alt="Image Preview">
+            <span class="upload-icon">⬆️</span>
+            <img src="#" alt="Image Preview" style="display:none;">
         </div>
         <div class="upload-box">
             <input type="file" accept="image/*" onchange="previewImage(event, 3)">
-            <img src="#" alt="Image Preview">
+            <span class="upload-icon">⬆️</span>
+            <img src="#" alt="Image Preview" style="display:none;">
         </div>
         <div class="upload-box">
             <input type="file" accept="image/*" onchange="previewImage(event, 4)">
-            <img src="#" alt="Image Preview">
+            <span class="upload-icon">⬆️</span>
+            <img src="#" alt="Image Preview" style="display:none;">
         </div>
         <div class="upload-box">
             <input type="file" accept="image/*" onchange="previewImage(event, 5)">
-            <img src="#" alt="Image Preview">
+            <span class="upload-icon">⬆️</span>
+            <img src="#" alt="Image Preview" style="display:none;">
         </div>
         <div class="upload-box">
             <input type="file" accept="image/*" onchange="previewImage(event, 6)">
-            <img src="#" alt="Image Preview">
+            <span class="upload-icon">⬆️</span>
+            <img src="#" alt="Image Preview" style="display:none;">
         </div>
         <div class="upload-box">
             <input type="file" accept="image/*" onchange="previewImage(event, 7)">
-            <img src="#" alt="Image Preview">
+            <span class="upload-icon">⬆️</span>
+            <img src="#" alt="Image Preview" style="display:none;">
         </div>
         <div class="upload-box">
             <input type="file" accept="image/*" onchange="previewImage(event, 8)">
-            <img src="#" alt="Image Preview">
+            <span class="upload-icon">⬆️</span>
+            <img src="#" alt="Image Preview" style="display:none;">
         </div>
         <div class="upload-box">
             <input type="file" accept="image/*" onchange="previewImage(event, 9)">
-            <img src="#" alt="Image Preview">
+            <span class="upload-icon">⬆️</span>
+            <img src="#" alt="Image Preview" style="display:none;">
         </div>
         <div class="upload-box">
             <input type="file" accept="image/*" onchange="previewImage(event, 10)">
-            <img src="#" alt="Image Preview">
+            <span class="upload-icon">⬆️</span>
+            <img src="#" alt="Image Preview" style="display:none;">
         </div>
         <div class="upload-box">
             <input type="file" accept="image/*" onchange="previewImage(event, 11)">
-            <img src="#" alt="Image Preview">
+            <span class="upload-icon">⬆️</span>
+            <img src="#" alt="Image Preview" style="display:none;">
         </div>
         <div class="upload-box">
             <input type="file" accept="image/*" onchange="previewImage(event, 12)">
-            <img src="#" alt="Image Preview">
+            <span class="upload-icon">⬆️</span>
+            <img src="#" alt="Image Preview" style="display:none;">
         </div>
         <div class="upload-box">
             <input type="file" accept="image/*" onchange="previewImage(event, 13)">
-            <img src="#" alt="Image Preview">
+            <span class="upload-icon">⬆️</span>
+            <img src="#" alt="Image Preview" style="display:none;">
         </div>
         <div class="upload-box">
             <input type="file" accept="image/*" onchange="previewImage(event, 14)">
-            <img src="#" alt="Image Preview">
+            <span class="upload-icon">⬆️</span>
+            <img src="#" alt="Image Preview" style="display:none;">
         </div>
     </div>
 
@@ -120,9 +159,11 @@
             const reader = new FileReader();
 
             reader.onload = function(e) {
-                const imgElement = input.nextElementSibling;
+                const imgElement = input.nextElementSibling.nextElementSibling;
+                const iconElement = input.nextElementSibling;
                 imgElement.src = e.target.result;
                 imgElement.style.display = 'block';
+                iconElement.style.display = 'none';
                 saveImage(index, e.target.result);
             }
 
@@ -140,8 +181,10 @@
                 const savedImage = localStorage.getItem(`image${index}`);
                 if (savedImage) {
                     const imgElement = box.querySelector('img');
+                    const iconElement = box.querySelector('.upload-icon');
                     imgElement.src = savedImage;
                     imgElement.style.display = 'block';
+                    iconElement.style.display = 'none';
                 }
             });
         }
