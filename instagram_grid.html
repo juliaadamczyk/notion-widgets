@@ -45,6 +45,7 @@
             position: relative;
             overflow: hidden;
             background-color: #ddd;
+            position: relative;
         }
         .upload-box input[type="file"] {
             position: absolute;
@@ -54,12 +55,29 @@
             cursor: pointer;
         }
         .upload-box img {
-            max-width: 100%;
-            max-height: 100%;
+            width: 100%; /* Ensure the image fills the upload-box */
+            height: 100%; /* Ensure the image fills the upload-box */
+            object-fit: cover; /* Cover the entire upload-box */
+            position: absolute;
+            left: 0;
+            top: 0;
+            transition: transform 0.2s ease-out;
         }
         .upload-icon {
             font-size: 48px;
             color: #aaa;
+        }
+        .delete-icon {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 20px;
+            color: #fff;
+            cursor: pointer;
+            display: none; /* Hidden by default */
+        }
+        .upload-box:hover .delete-icon {
+            display: block; /* Show delete icon on hover */
         }
     </style>
 </head>
@@ -71,80 +89,95 @@
     </div>
     <div class="container">
         <!-- Repeat the upload-box div 15 times -->
-        <div class="upload-box">
+        <div class="upload-box" id="upload-box-0">
             <input type="file" accept="image/*" onchange="previewImage(event, 0)">
             <span class="upload-icon">⬆️</span>
             <img src="#" alt="Image Preview" style="display:none;">
+            <span class="delete-icon" onclick="deleteImage(0)">✕</span>
         </div>
-        <div class="upload-box">
+        <div class="upload-box" id="upload-box-1">
             <input type="file" accept="image/*" onchange="previewImage(event, 1)">
             <span class="upload-icon">⬆️</span>
             <img src="#" alt="Image Preview" style="display:none;">
+            <span class="delete-icon" onclick="deleteImage(1)">✕</span>
         </div>
-        <div class="upload-box">
+        <div class="upload-box" id="upload-box-2">
             <input type="file" accept="image/*" onchange="previewImage(event, 2)">
             <span class="upload-icon">⬆️</span>
             <img src="#" alt="Image Preview" style="display:none;">
+            <span class="delete-icon" onclick="deleteImage(2)">✕</span>
         </div>
-        <div class="upload-box">
+        <div class="upload-box" id="upload-box-3">
             <input type="file" accept="image/*" onchange="previewImage(event, 3)">
             <span class="upload-icon">⬆️</span>
             <img src="#" alt="Image Preview" style="display:none;">
+            <span class="delete-icon" onclick="deleteImage(3)">✕</span>
         </div>
-        <div class="upload-box">
+        <div class="upload-box" id="upload-box-4">
             <input type="file" accept="image/*" onchange="previewImage(event, 4)">
             <span class="upload-icon">⬆️</span>
             <img src="#" alt="Image Preview" style="display:none;">
+            <span class="delete-icon" onclick="deleteImage(4)">✕</span>
         </div>
-        <div class="upload-box">
+        <div class="upload-box" id="upload-box-5">
             <input type="file" accept="image/*" onchange="previewImage(event, 5)">
             <span class="upload-icon">⬆️</span>
             <img src="#" alt="Image Preview" style="display:none;">
+            <span class="delete-icon" onclick="deleteImage(5)">✕</span>
         </div>
-        <div class="upload-box">
+        <div class="upload-box" id="upload-box-6">
             <input type="file" accept="image/*" onchange="previewImage(event, 6)">
             <span class="upload-icon">⬆️</span>
             <img src="#" alt="Image Preview" style="display:none;">
+            <span class="delete-icon" onclick="deleteImage(6)">✕</span>
         </div>
-        <div class="upload-box">
+        <div class="upload-box" id="upload-box-7">
             <input type="file" accept="image/*" onchange="previewImage(event, 7)">
             <span class="upload-icon">⬆️</span>
             <img src="#" alt="Image Preview" style="display:none;">
+            <span class="delete-icon" onclick="deleteImage(7)">✕</span>
         </div>
-        <div class="upload-box">
+        <div class="upload-box" id="upload-box-8">
             <input type="file" accept="image/*" onchange="previewImage(event, 8)">
             <span class="upload-icon">⬆️</span>
             <img src="#" alt="Image Preview" style="display:none;">
+            <span class="delete-icon" onclick="deleteImage(8)">✕</span>
         </div>
-        <div class="upload-box">
+        <div class="upload-box" id="upload-box-9">
             <input type="file" accept="image/*" onchange="previewImage(event, 9)">
             <span class="upload-icon">⬆️</span>
             <img src="#" alt="Image Preview" style="display:none;">
+            <span class="delete-icon" onclick="deleteImage(9)">✕</span>
         </div>
-        <div class="upload-box">
+        <div class="upload-box" id="upload-box-10">
             <input type="file" accept="image/*" onchange="previewImage(event, 10)">
             <span class="upload-icon">⬆️</span>
             <img src="#" alt="Image Preview" style="display:none;">
+            <span class="delete-icon" onclick="deleteImage(10)">✕</span>
         </div>
-        <div class="upload-box">
+        <div class="upload-box" id="upload-box-11">
             <input type="file" accept="image/*" onchange="previewImage(event, 11)">
             <span class="upload-icon">⬆️</span>
             <img src="#" alt="Image Preview" style="display:none;">
+            <span class="delete-icon" onclick="deleteImage(11)">✕</span>
         </div>
-        <div class="upload-box">
+        <div class="upload-box" id="upload-box-12">
             <input type="file" accept="image/*" onchange="previewImage(event, 12)">
             <span class="upload-icon">⬆️</span>
             <img src="#" alt="Image Preview" style="display:none;">
+            <span class="delete-icon" onclick="deleteImage(12)">✕</span>
         </div>
-        <div class="upload-box">
+        <div class="upload-box" id="upload-box-13">
             <input type="file" accept="image/*" onchange="previewImage(event, 13)">
             <span class="upload-icon">⬆️</span>
             <img src="#" alt="Image Preview" style="display:none;">
+            <span class="delete-icon" onclick="deleteImage(13)">✕</span>
         </div>
-        <div class="upload-box">
+        <div class="upload-box" id="upload-box-14">
             <input type="file" accept="image/*" onchange="previewImage(event, 14)">
             <span class="upload-icon">⬆️</span>
             <img src="#" alt="Image Preview" style="display:none;">
+            <span class="delete-icon" onclick="deleteImage(14)">✕</span>
         </div>
     </div>
 
@@ -164,11 +197,47 @@
                 imgElement.src = e.target.result;
                 imgElement.style.display = 'block';
                 iconElement.style.display = 'none';
+                
+                // Enable image cropping
+                pictureMouseDrag(imgElement);
+
                 saveImage(index, e.target.result);
             }
 
             reader.readAsDataURL(file);
         }
+
+        function pictureMouseDrag(imgElement) {
+            let isDragging = false;
+            let startX, startY, initialX, initialY;
+
+            imgElement.addEventListener('mousedown', startDrag);
+            imgElement.addEventListener('mousemove', drag);
+            imgElement.addEventListener('mouseup', endDrag);
+            imgElement.addEventListener('mouseleave', endDrag);
+
+            function startDrag(e) {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                initialX = imgElement.offsetLeft;
+                initialY = imgElement.offsetTop;
+            }
+
+            function drag(e) {
+                if (!isDragging) return;
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                imgElement.style.left = `${initialX + deltaX}px`;
+                imgElement.style.top = `${initialY + deltaY}px`;
+            }
+
+            function endDrag() {
+                isDragging = false;
+            }
+        }
+
+
 
         function saveImage(index, dataUrl) {
             localStorage.setItem(`image${index}`, dataUrl);
@@ -185,6 +254,7 @@
                     imgElement.src = savedImage;
                     imgElement.style.display = 'block';
                     iconElement.style.display = 'none';
+                    pictureMouseDrag(imgElement);
                 }
             });
         }
