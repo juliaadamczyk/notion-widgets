@@ -199,7 +199,7 @@
                 iconElement.style.display = 'none';
                 
                 // Enable image cropping
-                pictureMouseDrag(imgElement);
+                makeImageCropper(imgElement);
 
                 saveImage(index, e.target.result);
             }
@@ -207,9 +207,9 @@
             reader.readAsDataURL(file);
         }
 
-        function pictureMouseDrag(imgElement) {
+        function makeImageCropper(imgElement) {
             let isDragging = false;
-            let startX, startY, initialX, initialY;
+            let startX, startY, startLeft, startTop;
 
             imgElement.addEventListener('mousedown', startDrag);
             imgElement.addEventListener('mousemove', drag);
@@ -220,24 +220,40 @@
                 isDragging = true;
                 startX = e.clientX;
                 startY = e.clientY;
-                initialX = imgElement.offsetLeft;
-                initialY = imgElement.offsetTop;
+                startLeft = imgElement.offsetLeft;
+                startTop = imgElement.offsetTop;
+                imgElement.style.transition = 'none'; // Disable transition during drag
             }
 
             function drag(e) {
                 if (!isDragging) return;
                 const deltaX = e.clientX - startX;
                 const deltaY = e.clientY - startY;
-                imgElement.style.left = `${initialX + deltaX}px`;
-                imgElement.style.top = `${initialY + deltaY}px`;
+                const newLeft = startLeft + deltaX;
+                const newTop = startTop + deltaY;
+                imgElement.style.transform = `translate(${newLeft}px, ${newTop}px)`;
             }
 
             function endDrag() {
-                isDragging = false;
+                if (isDragging) {
+                    isDragging = false;
+                    imgElement.style.transition = 'transform 0.2s ease-out'; // Re-enable transition
+                    imgElement.style.transform = 'translate(0, 0)';
+                }
             }
         }
 
 
+
+        function deleteImage(index) {
+            localStorage.removeItem(`image${index}`);
+            const uploadBox = document.querySelector(`#upload-box-${index}`);
+            const imgElement = uploadBox.querySelector('img');
+            const iconElement = uploadBox.querySelector('.upload-icon');
+            imgElement.src = '';
+            imgElement.style.display = 'none';
+            iconElement.style.display = 'block';
+        }
 
         function saveImage(index, dataUrl) {
             localStorage.setItem(`image${index}`, dataUrl);
@@ -254,7 +270,7 @@
                     imgElement.src = savedImage;
                     imgElement.style.display = 'block';
                     iconElement.style.display = 'none';
-                    pictureMouseDrag(imgElement);
+                    makeImageCropper(imgElement);
                 }
             });
         }
