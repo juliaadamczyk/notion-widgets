@@ -59,7 +59,7 @@
             opacity: 0;
             cursor: pointer;
         }
-        .upload-box img {
+        .upload-box-img {
             width: 100%; /* Ensure the image fills the upload-box */
             height: 100%; /* Ensure the image fills the upload-box */
             object-fit: cover; /* Cover the entire upload-box */
@@ -69,8 +69,8 @@
             transition: transform 0.2s ease-out;
         }
         .upload-icon {
-            font-size: 48px;
-            color: #aaa;
+            width: 50px;
+            height: 50px;
         }
         .delete-icon {
             position: absolute;
@@ -96,92 +96,92 @@
         <!-- Repeat the upload-box div 15 times -->
         <div class="upload-box" id="upload-box-0">
             <input type="file" accept="image/*" onchange="previewImage(event, 0)">
-            <span class="upload-icon">⬆️</span>
-            <img src="#" alt="Image Preview" style="display:none;">
+            <img src="icons/instagram-picture.svg" class="upload-icon" alt="Upload Icon">
+            <img src="#" alt="Image Preview" class="upload-box-img" style="display:none;">
             <span class="delete-icon" onclick="deleteImage(0)">✕</span>
         </div>
         <div class="upload-box" id="upload-box-1">
             <input type="file" accept="image/*" onchange="previewImage(event, 1)">
-            <span class="upload-icon">⬆️</span>
-            <img src="#" alt="Image Preview" style="display:none;">
+            <img src="icons/instagram-picture.svg" class="upload-icon" alt="Upload Icon">
+            <img src="#" alt="Image Preview" class="upload-box-img" style="display:none;">
             <span class="delete-icon" onclick="deleteImage(1)">✕</span>
         </div>
         <div class="upload-box" id="upload-box-2">
             <input type="file" accept="image/*" onchange="previewImage(event, 2)">
-            <span class="upload-icon">⬆️</span>
-            <img src="#" alt="Image Preview" style="display:none;">
+            <img src="icons/instagram-picture.svg" class="upload-icon" alt="Upload Icon">
+            <img src="#" alt="Image Preview" class="upload-box-img" style="display:none;">
             <span class="delete-icon" onclick="deleteImage(2)">✕</span>
         </div>
         <div class="upload-box" id="upload-box-3">
             <input type="file" accept="image/*" onchange="previewImage(event, 3)">
-            <span class="upload-icon">⬆️</span>
-            <img src="#" alt="Image Preview" style="display:none;">
+            <img src="icons/instagram-picture.svg" class="upload-icon" alt="Upload Icon">
+            <img src="#" alt="Image Preview" class="upload-box-img" style="display:none;">
             <span class="delete-icon" onclick="deleteImage(3)">✕</span>
         </div>
         <div class="upload-box" id="upload-box-4">
             <input type="file" accept="image/*" onchange="previewImage(event, 4)">
-            <span class="upload-icon">⬆️</span>
-            <img src="#" alt="Image Preview" style="display:none;">
+            <img src="icons/instagram-picture.svg" class="upload-icon" alt="Upload Icon">
+            <img src="#" alt="Image Preview" class="upload-box-img" style="display:none;">
             <span class="delete-icon" onclick="deleteImage(4)">✕</span>
         </div>
         <div class="upload-box" id="upload-box-5">
             <input type="file" accept="image/*" onchange="previewImage(event, 5)">
-            <span class="upload-icon">⬆️</span>
-            <img src="#" alt="Image Preview" style="display:none;">
+            <img src="icons/instagram-picture.svg" class="upload-icon" alt="Upload Icon">
+            <img src="#" alt="Image Preview" class="upload-box-img" style="display:none;">
             <span class="delete-icon" onclick="deleteImage(5)">✕</span>
         </div>
         <div class="upload-box" id="upload-box-6">
             <input type="file" accept="image/*" onchange="previewImage(event, 6)">
-            <span class="upload-icon">⬆️</span>
-            <img src="#" alt="Image Preview" style="display:none;">
+            <img src="icons/instagram-picture.svg" class="upload-icon" alt="Upload Icon">
+            <img src="#" alt="Image Preview" class="upload-box-img" style="display:none;">
             <span class="delete-icon" onclick="deleteImage(6)">✕</span>
         </div>
         <div class="upload-box" id="upload-box-7">
             <input type="file" accept="image/*" onchange="previewImage(event, 7)">
-            <span class="upload-icon">⬆️</span>
-            <img src="#" alt="Image Preview" style="display:none;">
+            <img src="icons/instagram-picture.svg" class="upload-icon" alt="Upload Icon">
+            <img src="#" alt="Image Preview" class="upload-box-img" style="display:none;">
             <span class="delete-icon" onclick="deleteImage(7)">✕</span>
         </div>
         <div class="upload-box" id="upload-box-8">
             <input type="file" accept="image/*" onchange="previewImage(event, 8)">
-            <span class="upload-icon">⬆️</span>
-            <img src="#" alt="Image Preview" style="display:none;">
+            <img src="icons/instagram-picture.svg" class="upload-icon" alt="Upload Icon">
+            <img src="#" alt="Image Preview" class="upload-box-img" style="display:none;">
             <span class="delete-icon" onclick="deleteImage(8)">✕</span>
         </div>
         <div class="upload-box" id="upload-box-9">
             <input type="file" accept="image/*" onchange="previewImage(event, 9)">
-            <span class="upload-icon">⬆️</span>
-            <img src="#" alt="Image Preview" style="display:none;">
+            <img src="icons/instagram-picture.svg" class="upload-icon" alt="Upload Icon">
+            <img src="#" alt="Image Preview" class="upload-box-img" style="display:none;">
             <span class="delete-icon" onclick="deleteImage(9)">✕</span>
         </div>
         <div class="upload-box" id="upload-box-10">
             <input type="file" accept="image/*" onchange="previewImage(event, 10)">
-            <span class="upload-icon">⬆️</span>
-            <img src="#" alt="Image Preview" style="display:none;">
+            <img src="icons/instagram-picture.svg" class="upload-icon" alt="Upload Icon">
+            <img src="#" alt="Image Preview" class="upload-box-img" style="display:none;">
             <span class="delete-icon" onclick="deleteImage(10)">✕</span>
         </div>
         <div class="upload-box" id="upload-box-11">
             <input type="file" accept="image/*" onchange="previewImage(event, 11)">
-            <span class="upload-icon">⬆️</span>
-            <img src="#" alt="Image Preview" style="display:none;">
+            <img src="icons/instagram-picture.svg" class="upload-icon" alt="Upload Icon">
+            <img src="#" alt="Image Preview" class="upload-box-img" style="display:none;">
             <span class="delete-icon" onclick="deleteImage(11)">✕</span>
         </div>
         <div class="upload-box" id="upload-box-12">
             <input type="file" accept="image/*" onchange="previewImage(event, 12)">
-            <span class="upload-icon">⬆️</span>
-            <img src="#" alt="Image Preview" style="display:none;">
+            <img src="icons/instagram-picture.svg" class="upload-icon" alt="Upload Icon">
+            <img src="#" alt="Image Preview" class="upload-box-img" style="display:none;">
             <span class="delete-icon" onclick="deleteImage(12)">✕</span>
         </div>
         <div class="upload-box" id="upload-box-13">
             <input type="file" accept="image/*" onchange="previewImage(event, 13)">
-            <span class="upload-icon">⬆️</span>
-            <img src="#" alt="Image Preview" style="display:none;">
+            <img src="icons/instagram-picture.svg" class="upload-icon" alt="Upload Icon">
+            <img src="#" alt="Image Preview" class="upload-box-img" style="display:none;">
             <span class="delete-icon" onclick="deleteImage(13)">✕</span>
         </div>
         <div class="upload-box" id="upload-box-14">
             <input type="file" accept="image/*" onchange="previewImage(event, 14)">
-            <span class="upload-icon">⬆️</span>
-            <img src="#" alt="Image Preview" style="display:none;">
+            <img src="icons/instagram-picture.svg" class="upload-icon" alt="Upload Icon">
+            <img src="#" alt="Image Preview" class="upload-box-img" style="display:none;">
             <span class="delete-icon" onclick="deleteImage(14)">✕</span>
         </div>
     </div>
