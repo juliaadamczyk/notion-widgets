@@ -188,8 +188,23 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
+            initializeTab();
             loadImages();
         });
+
+        function initializeTab() {
+            if (!sessionStorage.getItem('tabId')) {
+                sessionStorage.setItem('tabId', generateUUID());
+            }
+        }
+
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0,
+                    v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
 
         function previewImage(event, index) {
             const input = event.target;
@@ -248,12 +263,11 @@
             }
         }
 
-
-
         function deleteImage(index) {
-            localStorage.removeItem(`image${index}`);
+            const tabId = sessionStorage.getItem('tabId');
+            sessionStorage.removeItem(`${tabId}-image${index}`);
             const uploadBox = document.querySelector(`#upload-box-${index}`);
-            const imgElement = uploadBox.querySelector('img');
+            const imgElement = uploadBox.querySelector('.upload-box-img');
             const iconElement = uploadBox.querySelector('.upload-icon');
             imgElement.src = '';
             imgElement.style.display = 'none';
@@ -261,16 +275,18 @@
         }
 
         function saveImage(index, dataUrl) {
-            localStorage.setItem(`image${index}`, dataUrl);
+            const tabId = sessionStorage.getItem('tabId');
+            sessionStorage.setItem(`${tabId}-image${index}`, dataUrl);
         }
 
         function loadImages() {
+            const tabId = sessionStorage.getItem('tabId');
             const uploadBoxes = document.querySelectorAll('.upload-box');
 
             uploadBoxes.forEach((box, index) => {
-                const savedImage = localStorage.getItem(`image${index}`);
+                const savedImage = sessionStorage.getItem(`${tabId}-image${index}`);
                 if (savedImage) {
-                    const imgElement = box.querySelector('img');
+                    const imgElement = box.querySelector('.upload-box-img');
                     const iconElement = box.querySelector('.upload-icon');
                     imgElement.src = savedImage;
                     imgElement.style.display = 'block';
@@ -279,6 +295,8 @@
                 }
             });
         }
+
+
     </script>
 </body>
 </html>
