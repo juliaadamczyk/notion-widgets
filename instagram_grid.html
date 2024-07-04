@@ -62,12 +62,14 @@
         .upload-box-img {
             width: 100%; /* Ensure the image fills the upload-box */
             height: 100%; /* Ensure the image fills the upload-box */
-            object-fit: cover; /* Cover the entire upload-box */
+            object-fit: cover;  /* Ensure the entire image is visible within the box */
             position: absolute;
-            left: 0;
-            top: 0;
-            transition: transform 0.2s ease-out;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%); /* Adjust for centering */
+            cursor: grab;
         }
+
         .upload-icon {
             width: 24px;
             height: 24px;
@@ -217,9 +219,9 @@
                 imgElement.src = e.target.result;
                 imgElement.style.display = 'block';
                 iconElement.style.display = 'none';
-                
-                // Enable image cropping
-                makeImageCropper(imgElement);
+
+                // Enable image moving
+                makeImageMovable(imgElement);
 
                 saveImage(index, e.target.result);
             }
@@ -227,38 +229,38 @@
             reader.readAsDataURL(file);
         }
 
-        function makeImageCropper(imgElement) {
+        function makeImageMovable(imgElement) {
             let isDragging = false;
             let startX, startY, startLeft, startTop;
 
             imgElement.addEventListener('mousedown', startDrag);
-            imgElement.addEventListener('mousemove', drag);
-            imgElement.addEventListener('mouseup', endDrag);
-            imgElement.addEventListener('mouseleave', endDrag);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', endDrag);
 
             function startDrag(e) {
+                e.preventDefault();
                 isDragging = true;
                 startX = e.clientX;
                 startY = e.clientY;
-                startLeft = imgElement.offsetLeft;
-                startTop = imgElement.offsetTop;
+                startLeft = imgElement.offsetLeft - imgElement.offsetWidth / 2;
+                startTop = imgElement.offsetTop - imgElement.offsetHeight / 2;
                 imgElement.style.transition = 'none'; // Disable transition during drag
+                imgElement.style.cursor = 'grabbing'; // Change cursor to grabbing
             }
 
             function drag(e) {
                 if (!isDragging) return;
                 const deltaX = e.clientX - startX;
                 const deltaY = e.clientY - startY;
-                const newLeft = startLeft + deltaX;
-                const newTop = startTop + deltaY;
-                imgElement.style.transform = `translate(${newLeft}px, ${newTop}px)`;
+                imgElement.style.left = `calc(50% + ${deltaX}px)`;
+                imgElement.style.top = `calc(50% + ${deltaY}px)`;
             }
 
             function endDrag() {
                 if (isDragging) {
                     isDragging = false;
-                    imgElement.style.transition = 'transform 0.2s ease-out'; // Re-enable transition
-                    imgElement.style.transform = 'translate(0, 0)';
+                    imgElement.style.transition = 'left 0.2s ease-out, top 0.2s ease-out'; // Re-enable transition
+                    imgElement.style.cursor = 'grab'; // Change cursor back to grab
                 }
             }
         }
@@ -291,11 +293,10 @@
                     imgElement.src = savedImage;
                     imgElement.style.display = 'block';
                     iconElement.style.display = 'none';
-                    makeImageCropper(imgElement);
+                    makeImageMovable(imgElement);
                 }
             });
         }
-
 
     </script>
 </body>
