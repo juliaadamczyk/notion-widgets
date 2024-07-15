@@ -189,115 +189,148 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            initializeTab();
-            loadImages();
-        });
-
-        function initializeTab() {
-            if (!sessionStorage.getItem('tabId')) {
-                sessionStorage.setItem('tabId', generateUUID());
-            }
-        }
-
         function generateUUID() {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                const r = Math.random() * 16 | 0,
-                    v = c === 'x' ? r : (r & 0x3 | 0x8);
+                var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
                 return v.toString(16);
             });
         }
-
+    
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+    
+        document.addEventListener('DOMContentLoaded', (event) => {
+            let noteId = getQueryParam('noteId');
+            if (!noteId) {
+                noteId = generateUUID();
+                const newUrl = `${window.location.pathname}?noteId=${noteId}`;
+                window.history.replaceState({}, '', newUrl);
+            }
+            const storageKey = `instagramGrid_${noteId}`;
+            loadImages(storageKey);
+        });
+    
+        function saveImage(storageKey, index, dataUrl) {
+            const storageData = JSON.parse(localStorage.getItem(storageKey)) || {};
+            storageData[`image${index}`] = dataUrl;
+            localStorage.setItem(storageKey, JSON.stringify(storageData));
+        }
+    
+        function savePosition(storageKey, index, left, top) {
+            const storageData = JSON.parse(localStorage.getItem(storageKey)) || {};
+            storageData[`position${index}`] = { left, top };
+            localStorage.setItem(storageKey, JSON.stringify(storageData));
+        }
+    
+        function loadImages(storageKey) {
+            const storageData = JSON.parse(localStorage.getItem(storageKey)) || {};
+            Object.keys(storageData).forEach(key => {
+                const index = key.replace(/(image|position)/, '');
+                const imgElement = document.querySelector(`#upload-box-${index} .upload-box-img`);
+                const iconElement = document.querySelector(`#upload-box-${index} .upload-icon`);
+                
+                if (key.startsWith('image')) {
+                    imgElement.src = storageData[key];
+                    imgElement.style.display = 'block';
+                    iconElement.style.display = 'none';
+                    makeImageMovable(imgElement, storageKey, index);
+                } else if (key.startsWith('position')) {
+                    const { left, top } = storageData[key];
+                    imgElement.style.left = left;
+                    imgElement.style.top = top;
+                }
+            });
+        }
+    
         function previewImage(event, index) {
             const input = event.target;
             const file = input.files[0];
             const reader = new FileReader();
-
+    
             reader.onload = function(e) {
                 const imgElement = input.nextElementSibling.nextElementSibling;
                 const iconElement = input.nextElementSibling;
                 imgElement.src = e.target.result;
                 imgElement.style.display = 'block';
                 iconElement.style.display = 'none';
-
-                // Enable image moving
-                makeImageMovable(imgElement);
-
-                saveImage(index, e.target.result);
+    
+                let noteId = getQueryParam('noteId');
+                const storageKey = `instagramGrid_${noteId}`;
+                saveImage(storageKey, index, e.target.result);
+                makeImageMovable(imgElement, storageKey, index);
             }
-
+    
             reader.readAsDataURL(file);
         }
-
-        function makeImageMovable(imgElement) {
+    
+        function makeImageMovable(imgElement, storageKey, index) {
             let isDragging = false;
             let startX, startY, startLeft, startTop;
-
+    
+            // Load position from localStorage
+            const positionData = JSON.parse(localStorage.getItem(storageKey)) || {};
+            if (positionData[`position${index}`]) {
+                const { left, top } = positionData[`position${index}`];
+                imgElement.style.left = left;
+                imgElement.style.top = top;
+            }
+    
             imgElement.addEventListener('mousedown', startDrag);
             document.addEventListener('mousemove', drag);
             document.addEventListener('mouseup', endDrag);
-
+    
             function startDrag(e) {
                 e.preventDefault();
                 isDragging = true;
                 startX = e.clientX;
                 startY = e.clientY;
-                startLeft = imgElement.offsetLeft - imgElement.offsetWidth / 2;
-                startTop = imgElement.offsetTop - imgElement.offsetHeight / 2;
+                startLeft = imgElement.offsetLeft;
+                startTop = imgElement.offsetTop;
                 imgElement.style.transition = 'none'; // Disable transition during drag
                 imgElement.style.cursor = 'grabbing'; // Change cursor to grabbing
             }
-
+    
             function drag(e) {
                 if (!isDragging) return;
                 const deltaX = e.clientX - startX;
                 const deltaY = e.clientY - startY;
-                imgElement.style.left = `calc(50% + ${deltaX}px)`;
-                imgElement.style.top = `calc(50% + ${deltaY}px)`;
+                imgElement.style.left = `${startLeft + deltaX}px`;
+                imgElement.style.top = `${startTop + deltaY}px`;
             }
-
+    
             function endDrag() {
                 if (isDragging) {
                     isDragging = false;
                     imgElement.style.transition = 'left 0.2s ease-out, top 0.2s ease-out'; // Re-enable transition
                     imgElement.style.cursor = 'grab'; // Change cursor back to grab
+    
+                    // Save position to localStorage
+                    savePosition(storageKey, index, imgElement.style.left, imgElement.style.top);
                 }
             }
         }
-
+    
         function deleteImage(index) {
-            const tabId = sessionStorage.getItem('tabId');
-            sessionStorage.removeItem(`${tabId}-image${index}`);
+            let noteId = getQueryParam('noteId');
+            const storageKey = `instagramGrid_${noteId}`;
+            const storageData = JSON.parse(localStorage.getItem(storageKey)) || {};
+    
+            delete storageData[`image${index}`];
+            delete storageData[`position${index}`];
+            localStorage.setItem(storageKey, JSON.stringify(storageData));
+    
             const uploadBox = document.querySelector(`#upload-box-${index}`);
             const imgElement = uploadBox.querySelector('.upload-box-img');
             const iconElement = uploadBox.querySelector('.upload-icon');
             imgElement.src = '';
             imgElement.style.display = 'none';
             iconElement.style.display = 'block';
+            imgElement.style.left = '';
+            imgElement.style.top = '';
         }
-
-        function saveImage(index, dataUrl) {
-            const tabId = sessionStorage.getItem('tabId');
-            sessionStorage.setItem(`${tabId}-image${index}`, dataUrl);
-        }
-
-        function loadImages() {
-            const tabId = sessionStorage.getItem('tabId');
-            const uploadBoxes = document.querySelectorAll('.upload-box');
-
-            uploadBoxes.forEach((box, index) => {
-                const savedImage = sessionStorage.getItem(`${tabId}-image${index}`);
-                if (savedImage) {
-                    const imgElement = box.querySelector('.upload-box-img');
-                    const iconElement = box.querySelector('.upload-icon');
-                    imgElement.src = savedImage;
-                    imgElement.style.display = 'block';
-                    iconElement.style.display = 'none';
-                    makeImageMovable(imgElement);
-                }
-            });
-        }
-
     </script>
+    
 </body>
 </html>
